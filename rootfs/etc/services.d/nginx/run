@@ -1,0 +1,5 @@
+#!/usr/bin/with-contenv sh
+
+/bin/bash /xshok_gen_nginx_api_conf.sh
+
+exec nginx -g "daemon off;"

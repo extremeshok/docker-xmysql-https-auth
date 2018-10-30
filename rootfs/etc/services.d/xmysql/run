@@ -1,0 +1,9 @@
+#!/usr/bin/with-contenv sh
+
+# Wait for MySQL to warm-up
+while ! mysqladmin ping --host $SQL_HOST --port ${SQL_PORT:-3306} -u${SQL_USERNAME} -p${SQL_PASSWORD} --silent; do
+  echo "Waiting for database to come up..."
+  sleep 2
+done
+
+exec xmysql --host $SQL_HOST --port ${SQL_PORT:-3306} --database $SQL_DATABASE --user $SQL_USERNAME --password $SQL_PASSWORD --portNumber 3000 --apiPrefix "${API_PREFIX:-/api/}" --ignoreTables "${API_IGNORETABLES:-}" --storageFolder "/tmp/xmysql" --ipAddress 0.0.0.0
