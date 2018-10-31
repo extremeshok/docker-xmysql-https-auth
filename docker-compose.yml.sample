@@ -19,6 +19,8 @@
       - API_IGNORETABLES=backends,bestats,sessions
       - API_KEY=some-secure-key
       - API_ALLOW_IP=192.1.0.0/24
+      - API_HTTP_AUTH=username:{PLAIN}password
+# used for server name, ssl cert
       - API_HOSTNAME=thishost.com
     restart: always
     links:

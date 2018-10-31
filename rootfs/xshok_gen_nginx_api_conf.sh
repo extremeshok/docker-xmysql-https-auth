@@ -72,22 +72,20 @@ cat <<EOF >> "/etc/nginx/conf.d/api.conf"
     autoindex off;
 EOF
 
-if [ -r "/etc/nginx/includes/allowedip.conf" ] || [ ! -z "$API_ALLOW_IP" ] ; then
-  if [ -r "/etc/nginx/includes/allowedip.conf" ] ; then
-    echo "    include /etc/nginx/includes/allowedip.conf;" >> "/etc/nginx/conf.d/api.conf"
-  fi
-  if [ ! -z "$API_ALLOW_IP" ] ; then
-    echo "    allow ${API_ALLOW_IP};" >> "/etc/nginx/conf.d/api.conf"
-  fi
-  echo "    deny all;" >> "/etc/nginx/conf.d/api.conf"
+if [ ! -z "$API_ALLOW_IP" ] && [ ! -z "$API_HTTP_AUTH" ] ; then
+  #require both allowed IP and HTTP_AUTH
+  echo "satisfy all;" >> "/etc/nginx/conf.d/api.conf"
 fi
 
-if [ -r "/etc/nginx/includes/htpasswd.conf" ] ; then
-  cat <<EOF >> "/etc/nginx/conf.d/api.conf"
-  # Basic Auth
-  auth_basic "Authorized only";
-  auth_basic_user_file /etc/nginx/includes/htpasswd.conf;
-EOF
+if [ ! -z "$API_ALLOW_IP" ] ; then
+  echo "allow ${API_ALLOW_IP};" >> "/etc/nginx/conf.d/api.conf"
+  echo "deny all;" >> "/etc/nginx/conf.d/api.conf"
+fi
+
+if [ ! -z "$API_HTTP_AUTH" ] ; then
+  echo 'auth_basic "Authorized only";' >> "/etc/nginx/conf.d/api.conf"
+  echo "auth_basic_user_file /etc/nginx/includes/htpasswd.conf;" >> "/etc/nginx/conf.d/api.conf"
+  echo -e "${HTTP_AUTH}\\n" > "/etc/nginx/includes/htpasswd.conf"
 fi
 
 if [ ! -z "$API_KEY" ] ; then
