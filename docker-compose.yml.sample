@@ -6,8 +6,6 @@
       - xshokacmehttp
     volumes:
       - vol-certificates:/certs/:ro
-      - ./data/etc/nginx/includes/htpasswd:/etc/nginx/includes/htpasswd.conf:ro
-      - ./data/etc/nginx/includes/allowedip:/etc/nginx/includes/allowedip.conf:ro
     environment:
       - TZ=${TZ}
       - SQL_HOST=mariadb
