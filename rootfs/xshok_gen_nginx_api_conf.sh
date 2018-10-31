@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 
+
 echo "#### Nginx SSL requirements ####"
 
 if [ -d "/certs" ] && [ -w "/certs/" ] ; then
