@@ -86,7 +86,7 @@ fi
 if [ ! -z "$API_HTTP_AUTH" ] ; then
   echo 'auth_basic "Authorized only";' >> "/etc/nginx/conf.d/api.conf"
   echo "auth_basic_user_file /etc/nginx/includes/htpasswd.conf;" >> "/etc/nginx/conf.d/api.conf"
-  echo -e "${HTTP_AUTH}\\n" > "/etc/nginx/includes/htpasswd.conf"
+  echo -e "${API_HTTP_AUTH}\\n" > "/etc/nginx/includes/htpasswd.conf"
 fi
 
 if [ ! -z "$API_KEY" ] ; then
