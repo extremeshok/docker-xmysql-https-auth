@@ -1,5 +1,7 @@
-# docker-xmysql-https-auth
+### docker-xmysql-https-auth
 xmysql with https and auth via apikey and/or htpasswd and/or ip
+
+View **docker-compose-sample.yml** in the source repository for usage
 
 ## API_FILTERTABLES and API_IGNORETABLES
 If API_FILTERTABLES and API_IGNORETABLES are specified, API_FILTERTABLES will overwrite API_IGNORETABLES
@@ -16,16 +18,16 @@ API_IGNORETABLES=table2,table4
 API_KEY, API_HTTP_AUTH and API_ALLOW_IP are all optional, you may enable 1 or more.
 If API_KEY and/or API_HTTP_AUTH and/or API_ALLOW_IP are enabled, all will be required for a successful auth.
 
-### api key in header (X-API-KEY)
+# api key in header (X-API-KEY)
 API_KEY=asecurekey
 
-### http auth_basic
+# http auth_basic
 *htpasswd encrypted password*
 API_HTTP_AUTH=user:encryptedpassword
 *plaintext password*
 API_HTTP_AUTH=user:{plain}password
 
-### IP allow
+# IP allow
 *ip with netmask*
 API_ALLOW_IP=11.22.33.0/24
 *ip without netmask*
