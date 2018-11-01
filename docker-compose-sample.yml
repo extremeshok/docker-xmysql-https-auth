@@ -14,7 +14,8 @@
       - SQL_USERNAME=${SQL_USERNAME}
       - SQL_PASSWORD=${SQL_PASSWORD}
       - API_PREFIX=/
-      - API_IGNORETABLES=backends,bestats,sessions
+      - API_FILTERTABLES=users,admins
+#      - API_IGNORETABLES=backends,stats,sessions
       - API_KEY=some-secure-key
       - API_ALLOW_IP=192.1.0.0/24
       - API_HTTP_AUTH=username:{PLAIN}password
