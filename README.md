@@ -30,6 +30,8 @@ API_HTTP_AUTH=user:{plain}password
 API_ALLOW_IP=11.22.33.0/24
 *ip without netmask*
 API_ALLOW_IP=11.22.33.44
+*multiple ip addresses*
+API_ALLOW_IP=11.22.33.44,11.22.33.0/24
 
 ## Notes:
 xmysql will wait for MySQL to warm-up, checks every 2 seconds

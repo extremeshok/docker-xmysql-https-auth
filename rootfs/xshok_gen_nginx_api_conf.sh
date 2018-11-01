@@ -79,7 +79,20 @@ if [ ! -z "$API_ALLOW_IP" ] && [ ! -z "$API_HTTP_AUTH" ] ; then
 fi
 
 if [ ! -z "$API_ALLOW_IP" ] ; then
-  echo "allow ${API_ALLOW_IP};" >> "/etc/nginx/conf.d/api.conf"
+  #prepare the varibles
+  API_ALLOW_IP="$(echo ",${API_ALLOW_IP}," | tr -s "[:blank:]" "," | tr -s "," )"
+  # remove beginning ,
+  API_ALLOW_IP=${API_ALLOW_IP/#,}
+  # remove ending ,
+  API_ALLOW_IP=${API_ALLOW_IP/%,}
+  #convert to spaces
+  API_ALLOW_IP=${API_ALLOW_IP//,/ }
+  for allowed_ip in $API_ALLOW_IP ; do
+    #make sure there are no empty ip's
+    if [ "$allowed_ip" != "" ]; then
+      echo "allow ${allowed_ip};" >> "/etc/nginx/conf.d/api.conf"
+    fi
+  done
   echo "deny all;" >> "/etc/nginx/conf.d/api.conf"
 fi
 
