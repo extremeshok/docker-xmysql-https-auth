@@ -3,6 +3,12 @@ xmysql with https and auth via apikey and/or htpasswd and/or ip
 
 View **docker-compose-sample.yml** in the source repository for usage
 
+## Notes:
+xmysql will wait for MySQL to warm-up, checks every 2 seconds
+httpS only (port 443), http (port 80) will redirect all requests to httpS
+A self signed certificate will be generated if /certs/cert.pem or /certs/${API_HOSTNAME}/fullchain.pem is not found
+A 4096bit DHPARAM will be generated if no /certs/dhparam.pem exists, this will take a few minutes.
+
 ## API_FILTERTABLES and API_IGNORETABLES
 If API_FILTERTABLES and API_IGNORETABLES are specified, API_FILTERTABLES will overwrite API_IGNORETABLES
 
@@ -34,7 +40,3 @@ API_ALLOW_IP=11.22.33.0/24
 API_ALLOW_IP=11.22.33.44
 *multiple ip addresses*
 API_ALLOW_IP=11.22.33.44,11.22.33.0/24
-
-## Notes:
-xmysql will wait for MySQL to warm-up, checks every 2 seconds
-httpS only (port 443), http (port 80) will redirect all requests to httpS
