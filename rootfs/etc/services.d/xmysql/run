@@ -1,4 +1,4 @@
-#!/usr/bin/with-contenv sh
+#!/usr/bin/with-contenv bash
 
 # Wait for MySQL to warm-up
 while ! mysqladmin ping --host "$SQL_HOST" --port "${SQL_PORT:-3306}" -u"${SQL_USERNAME:-root}" -p"${SQL_PASSWORD}" --silent; do
@@ -37,5 +37,5 @@ if ! [ -z "$API_FILTERTABLES" ] ; then
   # remove ending ,
   API_IGNORETABLES=${API_IGNORETABLES/%,}
 fi
-
+echo "Starting...."
 exec xmysql --host "$SQL_HOST" --port "${SQL_PORT:-3306}" --database "${SQL_DATABASE}" --user "${SQL_USERNAME:-root}" --password "${SQL_PASSWORD}" --portNumber 3000 --apiPrefix "${API_PREFIX:-/api/}" --ignoreTables "${API_IGNORETABLES:-}" --storageFolder "/tmp/xmysql" --ipAddress 0.0.0.0
