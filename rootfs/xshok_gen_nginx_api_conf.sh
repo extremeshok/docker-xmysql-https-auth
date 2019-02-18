@@ -30,14 +30,12 @@ if [ -d "/certs" ] && [ -w "/certs/" ] ; then
       exit 1
     fi
   fi
+else
+  while ! [ -r "/certs/${API_HOSTNAME}/fullchain.pem" ] && [ -r "/certs/${API_HOSTNAME}/privkey.pem" ] ; do
+    echo "Waiting for certs to be provisioned..."
+    sleep 2
+  done
 fi
-
-while ! [ -r "/certs/${API_HOSTNAME}/fullchain.pem" ] && [ -r "/certs/${API_HOSTNAME}/privkey.pem" ] ; do
-  echo "Waiting for certs to be provisioned..."
-  sleep 2
-done
-
-# Wait for th
 
 echo "#### Generating Nginx API config ####"
 

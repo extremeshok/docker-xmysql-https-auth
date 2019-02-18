@@ -16,6 +16,7 @@ fi
 
 # filter table, is a comma deliminated list: value1,value2,value3
 # filtering logic
+removed_count=0
 if ! [ -z "$API_FILTERTABLES" ] ; then
   if ! [ -z "$API_IGNORETABLES" ] ; then
     echo "WARNING: API_FILTERTABLES and API_IGNORETABLES specified, API_FILTERTABLES will overwrite API_IGNORETABLES"
@@ -37,5 +38,12 @@ if ! [ -z "$API_FILTERTABLES" ] ; then
   # remove ending ,
   API_IGNORETABLES=${API_IGNORETABLES/%,}
 fi
-echo "Starting...."
-exec xmysql --host "$SQL_HOST" --port "${SQL_PORT:-3306}" --database "${SQL_DATABASE}" --user "${SQL_USERNAME:-root}" --password "${SQL_PASSWORD}" --portNumber 3000 --apiPrefix "${API_PREFIX:-/api/}" --ignoreTables "${API_IGNORETABLES:-}" --storageFolder "/tmp/xmysql" --ipAddress 0.0.0.0
+table_count="$(mysql --host "$SQL_HOST" --port "${SQL_PORT:-3306}" -u"${SQL_USERNAME:-root}" -p"${SQL_PASSWORD}" --database "${SQL_DATABASE}" -Bse "select count(*) from information_schema.TABLES where TABLE_SCHEMA='${SQL_DATABASE}';")"
+
+if [[ $((table_count-removed_count)) -ge "1" ]] ; then
+  echo "Starting...."
+  exec xmysql --host "$SQL_HOST" --port "${SQL_PORT:-3306}" --database "${SQL_DATABASE}" --user "${SQL_USERNAME:-root}" --password "${SQL_PASSWORD}" --portNumber 3000 --apiPrefix "${API_PREFIX:-/api/}" --ignoreTables "${API_IGNORETABLES:-}" --storageFolder "/tmp/xmysql" --ipAddress 0.0.0.0
+else
+  echo "ERROR: no usable tables found for database ${SQL_DATABASE}"
+  exit 1
+fi
