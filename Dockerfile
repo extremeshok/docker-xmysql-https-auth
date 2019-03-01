@@ -25,11 +25,6 @@ RUN echo "**** install bash runtime packages ****" \
     openssl \
     tzdata
 
-RUN echo "**** cleanup ****" \
-  && find /usr/local \( -type d -a -name test -o -name tests \) -o \( -type f -a -name '*.pyc' -o -name '*.pyo' \) -exec rm -rf '{}' + \
-  && apk del .build-deps \
-  && rm -rf /var/cache/apk/*
-
 # add local files
 COPY ./rootfs/ /
 
