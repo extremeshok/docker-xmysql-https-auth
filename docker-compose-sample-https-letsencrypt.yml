@@ -1,0 +1,65 @@
+version: '2.1'
+########## SERVICES ########
+services:
+#
+# In this example the system is running under HTTPS (ssl)
+# Certificate is created via the acme container using letsencrypt
+#
+###### xshokxmysqlhttps
+  xshokxmysqlhttps:
+    image: extremeshok/xmysql-https-auth:latest
+    depends_on:
+      - mariadb
+      - xshokacmehttp
+    volumes:
+      - vol-certificates:/certs/:ro
+    environment:
+      - TZ=${TZ}
+      - SQL_HOST=mariadb
+      - SQL_PORT=3306
+      - SQL_DATABASE=${SQL_DATABASE}
+      - SQL_USERNAME=${SQL_USERNAME}
+      - SQL_PASSWORD=${SQL_PASSWORD}
+      - API_PREFIX=/
+      - API_FILTERTABLES=users,admins
+      - API_IGNORETABLES=backends,stats,sessions
+      - API_KEY=some-secure-key
+      - API_ALLOW_IP=192.1.0.0/24,10.10.10.10
+      - API_HTTP_AUTH=username:{PLAIN}password
+# used for server name, ssl cert
+      - API_HOSTNAME=${HOSTNAME}
+    restart: always
+    links:
+      - mariadb:mariadb
+    ports:
+      - 3443:443
+    sysctls:
+      - net.ipv6.conf.all.disable_ipv6=${SYSCTL_IPV6_DISABLED:-0}
+    networks:
+      network:
+        ipv4_address: ${IPV4_NETWORK:-172.22.1}.202
+        aliases:
+          - xmysql
+#
+# https://github.com/extremeshok/docker-acme-http2https
+#
+###### xshokacmehttp
+  xshokacmehttp:
+    image: extremeshok/acme-http2https:latest
+    environment:
+      - TZ=${TZ}
+      - ACME_DOMAINS=${HOSTNAME}
+      - ACME_RESTART_CONTAINERS=xshokxmysqlhttps
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - vol-acme:/acme/:rw
+      - vol-certificates:/certs/:rw
+    ports:
+      - 80:80
+    restart: always
+    sysctls:
+      - net.ipv6.conf.all.disable_ipv6=${SYSCTL_IPV6_DISABLED:-0}
+    networks:
+      network:
+        aliases:
+          - xshokacmehttp

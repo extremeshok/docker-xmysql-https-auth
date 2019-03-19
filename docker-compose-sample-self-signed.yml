@@ -1,11 +1,17 @@
+version: '2.1'
+########## SERVICES ########
+services:
+#
+# In this example the system is running under HTTPS (ssl)
+# a selfsigned certificate will be created if one is not found in the /certs/ volume
+#
 ###### xshokxmysqlhttps
   xshokxmysqlhttps:
     image: extremeshok/xmysql-https-auth:latest
     depends_on:
       - mariadb
-      - xshokacmehttp
     volumes:
-      - vol-certificates:/certs/:ro
+      - vol-certificates:/certs/:rw
     environment:
       - TZ=${TZ}
       - SQL_HOST=mariadb
@@ -20,7 +26,7 @@
       - API_ALLOW_IP=192.1.0.0/24,10.10.10.10
       - API_HTTP_AUTH=username:{PLAIN}password
 # used for server name, ssl cert
-      - API_HOSTNAME=thishost.com
+      - API_HOSTNAME=${HOSTNAME}
     restart: always
     links:
       - mariadb:mariadb
