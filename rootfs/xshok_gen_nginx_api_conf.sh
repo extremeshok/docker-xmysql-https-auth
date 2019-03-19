@@ -31,9 +31,17 @@ if [ -d "/certs" ] && [ -w "/certs/" ] ; then
     fi
   fi
 else
-  while ! [ -r "/certs/${API_HOSTNAME}/fullchain.pem" ] && [ -r "/certs/${API_HOSTNAME}/privkey.pem" ] ; do
-    echo "Waiting for certs to be provisioned..."
-    sleep 2
+  while ! [ -r "/certs/dhparam.pem" ] ; do
+    echo "Waiting for dhparam (/certs/dhparam.pem) to be provisioned..."
+    sleep 3
+  done
+  while ! [ -r "/certs/${API_HOSTNAME}/fullchain.pem" ] ; do
+    echo "Waiting for certs (/certs/${API_HOSTNAME}/fullchain.pe) to be provisioned..."
+    sleep 3
+  done
+  while ! [ -r "/certs/${API_HOSTNAME}/privkey.pem" ] ; do
+    echo "Waiting for certs (/certs/${API_HOSTNAME}/privkey.pem) to be provisioned..."
+    sleep 3
   done
 fi
 
