@@ -21,6 +21,7 @@ RUN echo "**** install bash runtime packages ****" \
     bash \
     coreutils \
     curl \
+    inotify-tools \
     mariadb-client \
     openssl \
     tzdata
@@ -32,7 +33,8 @@ RUN echo "**** configure ****" \
   && mkdir -p /tmp/xmysql \
   && mkdir -p /certs \
   && chown -R nginx:nginx /var/www \
-  && chmod 777 /xshok_gen_nginx_api_conf.sh
+  && chmod 777 /xshok_gen_nginx_api_conf.sh \
+  && chmod 777 /xshok-monitor-certs.sh
 
 EXPOSE 443/tcp
 
