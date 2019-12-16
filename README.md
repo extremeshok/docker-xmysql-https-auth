@@ -1,4 +1,7 @@
-### docker-xmysql-https-auth
+# docker-xmysql-https-auth
+
+https://hub.docker.com/r/extremeshok/xmysql-https-auth
+
 xmysql with https and auth via apikey and/or htpasswd and/or ip
 
 View **docker-compose-sample.yml** in the source repository for usage
